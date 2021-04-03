@@ -103,6 +103,11 @@ app.get("/movies/add", (req, res) => {
     }
 });
 
+const sortobject = (object, value) => {
+    object.sort((a, b) => a[value] - b[value]);
+    return object;
+  };
+
 app.get("/movies/delete/:id", (req, res) => {
     let id = req.params.id;
     if (Object.values(movies)[id - 1] != null) {
