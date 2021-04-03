@@ -92,7 +92,7 @@ app.get("/movies/add", (req, res) => {
         res.send({
             status: 403,
             error: true,
-            message: "you cannot create a movie without providing a title and a year",
+            message: "You cannot create a movie without providing a title and a year",
         });
     } else if (rating == null) {
         movies.push({ title: title, year: year, rating: 4 });
@@ -101,8 +101,4 @@ app.get("/movies/add", (req, res) => {
         movies.push({ title: title, year: year, rating: rating });
         res.send({ status: 200, data: movies });
     }
-});
-
-app.get("/movies/edit", (req, res) => {
-    res.send({ status: 200, message: "ok" });
 });
