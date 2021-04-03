@@ -102,3 +102,17 @@ app.get("/movies/add", (req, res) => {
         res.send({ status: 200, data: movies });
     }
 });
+
+app.get("/movies/delete/:id", (req, res) => {
+    let id = req.params.id;
+    if (Object.values(movies)[id - 1] != null) {
+        movies.splice(id - 1, 1);
+        res.send({ status: 200, data: movies });
+    } else {
+        res.send({
+            status: 404,
+            error: true,
+            message: "the movie id " + id + " does not exist",
+        });
+    }
+});
