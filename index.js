@@ -78,3 +78,31 @@ app.get("/movies/get/:input", (req, res) => {
         res.send({ status: 200, data: sortobject(movies, "title") });
     }
 });
+
+app.get("/movies/add", (req, res) => {
+    let title = req.query.title;
+    let year = req.query.year;
+    let rating = req.query.rating;
+    if (
+        title == null ||
+        year == null ||
+        year.toString().length < 4 ||
+        isNaN(year)
+    ) {
+        res.send({
+            status: 403,
+            error: true,
+            message: "you cannot create a movie without providing a title and a year",
+        });
+    } else if (rating == null) {
+        movies.push({ title: title, year: year, rating: 4 });
+        res.send({ status: 200, data: movies });
+    } else {
+        movies.push({ title: title, year: year, rating: rating });
+        res.send({ status: 200, data: movies });
+    }
+});
+
+app.get("/movies/edit", (req, res) => {
+    res.send({ status: 200, message: "ok" });
+});
