@@ -66,3 +66,15 @@ app.get("/movies/read/id/:id", (req, res) => {
         });
     }
 });
+
+app.get("/movies/get/:input", (req, res) => {
+    if (req.params.input === "by-date") {
+        res.send({ status: 200, data: sortobject(movies, "year") });
+    }
+    if (req.params.input === "by-rating") {
+        res.send({ status: 200, data: sortobject(movies, "rating") });
+    }
+    if (req.params.input === "by-title") {
+        res.send({ status: 200, data: sortobject(movies, "title") });
+    }
+});
