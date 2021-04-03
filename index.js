@@ -62,10 +62,39 @@ app.get("/movies/read/id/:id", (req, res) => {
         res.send({
             status: 404,
             error: true,
-            message: "the movie " + id + " does not exist"
+            message: "The Movie " + id + " does not exist"
         });
     }
 });
+
+app.get("/movies/read", (req, res) => res.send({
+    status: 200,
+    data: movies
+}));
+
+app.get("/movies/read/by-date", (req, res) =>
+    res.send({
+        data: movies.sort((f, s) => {
+            return f.year - s.year;
+        }),
+    })
+);
+
+app.get("/movies/read/by-rating", (req, res) =>
+    res.send({
+        data: movies.sort((f, s) => {
+            return s.rating - f.rating;
+        }),
+    })
+);
+
+app.get("/movies/read/by-title", (req, res) =>
+    res.send({
+        data: movies.sort((f, s) => {
+            return f.title.localeCompare(s.title);
+        }),
+    })
+);
 
 app.get("/movies/get/:input", (req, res) => {
     if (req.params.input === "by-date") {
@@ -106,18 +135,39 @@ app.get("/movies/add", (req, res) => {
 const sortobject = (object, value) => {
     object.sort((a, b) => a[value] - b[value]);
     return object;
-  };
+};
 
-app.get("/movies/delete/:id", (req, res) => {
-    let id = req.params.id;
-    if (Object.values(movies)[id - 1] != null) {
-        movies.splice(id - 1, 1);
-        res.send({ status: 200, data: movies });
-    } else {
+app.delete("/movies/delete/:id", (req, res) => {
+    let filmId = req.params.id;
+    if (filmId >= movies.length || filmId < 0) {
         res.send({
             status: 404,
             error: true,
-            message: "the movie id " + id + " does not exist",
+            message: `the movie id ${filmId} does not exist `,
         });
+    } else {
+        let films = movies;
+        films.splice(filmId, 1);
+        res.send(films);
     }
+});
+
+app.put("/movies/update/:id", (req, res) => {
+    var movieID = req.params.id;
+    var movieTitle = req.query.title;
+    var movieYear = req.query.year;
+    var movieRating = req.query.rating;
+    if (movieID < 0 || movieID >= movies.length) {
+        res.send("Invalid Movie id");
+    }
+    if (movieTitle != null) {
+        movies[movieID].title = movieTitle;
+    }
+    if (movieYear != null) {
+        movies[movieID].year = movieYear;
+    }
+    if (movieRating != null) {
+        movies[movieID].rating = movieRating;
+    }
+    res.send(movies);
 });
